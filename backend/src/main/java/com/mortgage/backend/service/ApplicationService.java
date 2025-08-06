@@ -13,6 +13,8 @@ import com.mortgage.backend.repository.ApplicationRepository;
 import com.mortgage.backend.repository.DecisionRepository;
 import com.mortgage.backend.repository.UserRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,7 @@ public class ApplicationService {
     private final DecisionRepository decisionRepository;
     private final UserRepository userRepository;
     private final ApplicationMapper applicationMapper;
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationService.class);
 
     public ApplicationService(ApplicationRepository applicationRepository, UserRepository userRepository, DecisionRepository decisionRepository, ApplicationMapper applicationMapper) {
         this.applicationRepository = applicationRepository;
@@ -38,7 +41,11 @@ public class ApplicationService {
     }
 
     public ApplicationResponse create(ApplicationRequest dto) {
+        logger.info("Creating application service");
+        User user = userRepository.findByNationalId(dto.getNationalId()).orElseThrow(() -> new NoSuchElementException("User not found"));
+        logger.info("Creating application got user");
         Application application = applicationMapper.toEntity(dto);
+        application.setApplicant(user);
         return applicationMapper.toDto(applicationRepository.save(application));
     }
 
@@ -66,6 +73,8 @@ public class ApplicationService {
                 .orElseThrow(() -> new NoSuchElementException("Approver not found"));
 
         Decision decision = new Decision();
+        decision.setApplication(application);
+        decision.setDecisionType(dto.getDecisionType());
         decision.setApprover(approver);
         decision.setComments(dto.getComments());
 
@@ -88,7 +97,7 @@ public class ApplicationService {
         BooleanExpression predicate = qApplication.isNotNull();
 
         if (nationalId != null) {
-            predicate = predicate.and(qApplication.user.nationalId.eq(nationalId));
+            predicate = predicate.and(qApplication.applicant.nationalId.eq(nationalId));
         }
 
         if (status != null) {

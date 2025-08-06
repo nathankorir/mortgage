@@ -6,6 +6,8 @@ import com.mortgage.backend.dto.DecisionRequestDto;
 import com.mortgage.backend.enums.Enum;
 import com.mortgage.backend.service.ApplicationService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -21,6 +23,8 @@ import java.util.UUID;
 @RequestMapping("/api/v1/applications")
 public class ApplicationController {
     private final ApplicationService applicationService;
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
+
 
     public ApplicationController(ApplicationService applicationService) {
         this.applicationService = applicationService;
@@ -28,6 +32,7 @@ public class ApplicationController {
 
     @PostMapping
     public ResponseEntity<ApplicationResponse> create(@RequestBody @Valid ApplicationRequest dto) {
+        logger.info("Creating Application");
         return ResponseEntity.ok(applicationService.create(dto));
     }
 

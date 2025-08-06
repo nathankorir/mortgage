@@ -44,7 +44,7 @@ public class Application {
     @OneToOne(mappedBy = "application", cascade = CascadeType.ALL)
     private Decision decision;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) // foreign key to User
-    private User user;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id", nullable = false) // foreign key to User
+//    private User user;
 }

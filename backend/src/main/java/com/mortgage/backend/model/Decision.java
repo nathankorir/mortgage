@@ -25,7 +25,7 @@ public class Decision {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private DecisionType type;
+    private DecisionType decisionType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "approver_id", nullable = false)

@@ -1,5 +1,6 @@
 package com.mortgage.backend.dto;
 
+import com.mortgage.backend.enums.Enum.DecisionType;
 import com.mortgage.backend.enums.Enum.ApplicationStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -13,6 +14,12 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DecisionRequestDto {
+//    @NotNull(message = "Application ID is required")
+//    private UUID applicationId;
+//
+    @NotNull(message = "Decision type is required")
+    private DecisionType decisionType;
+
     @NotNull(message = "Status is required")
     private ApplicationStatus status;
 
