@@ -21,6 +21,8 @@ public class User {
     private UUID id;
     private String name;
     @Column(nullable = false, unique = true)
+    private Long nationalId;
+    @Column(nullable = false, unique = true)
     private String username;
     @Column(nullable = false, unique = true)
     private String email;
