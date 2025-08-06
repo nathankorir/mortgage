@@ -67,17 +67,17 @@ CREATE TABLE document
     file_size      BIGINT,
     presigned_url  TEXT         NOT NULL,
     uploaded_at    TIMESTAMP    NOT NULL DEFAULT now(),
-    FOREIGN KEY (application_id) REFERENCES applications (id) ON DELETE CASCADE
+    FOREIGN KEY (application_id) REFERENCES application (id) ON DELETE CASCADE
 );
 
 CREATE TABLE decision
 (
     id             UUID PRIMARY KEY     DEFAULT uuid_generate_v4(),
     application_id UUID        NOT NULL,
-    officer_id     UUID        NOT NULL,
-    status         VARCHAR(20) NOT NULL CHECK (status IN ('APPROVED', 'REJECTED')),
+    approver_id   UUID        NOT NULL,
+    decision_type VARCHAR(20) NOT NULL CHECK (decision_type IN ('APPROVED', 'REJECTED')),
     comments       TEXT,
     decided_at     TIMESTAMP   NOT NULL DEFAULT now(),
-    FOREIGN KEY (application_id) REFERENCES applications (id) ON DELETE CASCADE,
-    FOREIGN KEY (officer_id) REFERENCES users (id) ON DELETE CASCADE
+    FOREIGN KEY (application_id) REFERENCES application (id) ON DELETE CASCADE,
+    FOREIGN KEY (approver_id) REFERENCES users (id) ON DELETE CASCADE
 );
