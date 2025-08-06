@@ -1,6 +1,6 @@
-package com.mortgage.mortgage.service;
+package com.mortgage.backend.service;
 
-import com.mortgage.mortgage.dto.LoginDto;
+import com.mortgage.backend.dto.LoginDto;
 
 public interface AuthService {
     String login(LoginDto loginDto);

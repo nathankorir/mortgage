@@ -1,8 +1,8 @@
-package com.mortgage.mortgage.controller;
+package com.mortgage.backend.controller;
 
-import com.mortgage.mortgage.dto.JwtAuthResponse;
-import com.mortgage.mortgage.dto.LoginDto;
-import com.mortgage.mortgage.service.AuthService;
+import com.mortgage.backend.dto.JwtAuthResponse;
+import com.mortgage.backend.dto.LoginDto;
+import com.mortgage.backend.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

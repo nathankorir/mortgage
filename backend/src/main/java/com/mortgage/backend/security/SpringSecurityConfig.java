@@ -1,4 +1,4 @@
-package com.mortgage.mortgage.security;
+package com.mortgage.backend.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;

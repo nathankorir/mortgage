@@ -1,6 +1,6 @@
-package com.mortgage.mortgage.repository;
+package com.mortgage.backend.repository;
 
-import com.mortgage.mortgage.model.User;
+import com.mortgage.backend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

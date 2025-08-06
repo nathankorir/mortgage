@@ -1,7 +1,7 @@
-package com.mortgage.mortgage.security;
+package com.mortgage.backend.security;
 
-import com.mortgage.mortgage.model.User;
-import com.mortgage.mortgage.repository.UserRepository;
+import com.mortgage.backend.model.User;
+import com.mortgage.backend.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

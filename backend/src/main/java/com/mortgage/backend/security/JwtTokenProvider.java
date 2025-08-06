@@ -1,4 +1,4 @@
-package com.mortgage.mortgage.security;
+package com.mortgage.backend.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

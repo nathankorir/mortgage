@@ -1,4 +1,4 @@
-package com.mortgage.mortgage.dto;
+package com.mortgage.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

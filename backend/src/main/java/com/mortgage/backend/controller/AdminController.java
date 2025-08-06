@@ -1,4 +1,4 @@
-package com.mortgage.mortgage.controller;
+package com.mortgage.backend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

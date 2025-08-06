@@ -1,4 +1,4 @@
-package com.mortgage.mortgage.model;
+package com.mortgage.backend.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

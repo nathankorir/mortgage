@@ -1,4 +1,4 @@
-package com.mortgage.mortgage.security;
+package com.mortgage.backend.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

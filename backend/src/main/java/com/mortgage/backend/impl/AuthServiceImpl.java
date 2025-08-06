@@ -1,8 +1,8 @@
-package com.mortgage.mortgage.impl;
+package com.mortgage.backend.impl;
 
-import com.mortgage.mortgage.dto.LoginDto;
-import com.mortgage.mortgage.security.JwtTokenProvider;
-import com.mortgage.mortgage.service.AuthService;
+import com.mortgage.backend.dto.LoginDto;
+import com.mortgage.backend.security.JwtTokenProvider;
+import com.mortgage.backend.service.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,6 +1,6 @@
-package com.mortgage.mortgage.repository;
+package com.mortgage.backend.repository;
 
-import com.mortgage.mortgage.model.Role;
+import com.mortgage.backend.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {
