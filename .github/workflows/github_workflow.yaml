@@ -30,9 +30,15 @@ jobs:
 
       - name: Install Trivy
         uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: 'mortgage-service:latest'
+          format: 'sarif'
+          exit-code: 0
+          severity: 'CRITICAL,HIGH'
+          output: 'trivy-results.sarif'
 
-      - name: Scan Docker image with Trivy
-        run: trivy image --exit-code 1 --severity CRITICAL,HIGH mortgage-service:latest || true
+#      - name: Scan Docker image with Trivy
+#        run: trivy image --exit-code 1 --severity CRITICAL,HIGH mortgage-service:latest || true
 
       - name: Start Docker Compose
         working-directory: infra
