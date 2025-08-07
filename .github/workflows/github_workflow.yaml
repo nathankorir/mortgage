@@ -43,4 +43,4 @@ jobs:
         uses: aquasecurity/trivy-action@master
 
       - name: Scan Docker image with Trivy
-        run: trivy image --exit-code 1 --severity CRITICAL,HIGH infra_mortgage-service:latest || true
+        run: trivy image --exit-code 1 --severity CRITICAL,HIGH mortgage-service:latest || true
