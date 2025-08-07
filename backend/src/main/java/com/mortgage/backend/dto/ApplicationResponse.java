@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,5 +18,6 @@ public class ApplicationResponse {
     private String purpose;
     private Double amount;
     private Enum.ApplicationStatus status;
+    private List<DocumentResponse> documents;
     private LocalDateTime createdAt;
 }

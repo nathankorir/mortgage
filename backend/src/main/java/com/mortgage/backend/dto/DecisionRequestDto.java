@@ -14,9 +14,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DecisionRequestDto {
-//    @NotNull(message = "Application ID is required")
-//    private UUID applicationId;
-//
     @NotNull(message = "Decision type is required")
     private DecisionType decisionType;
 

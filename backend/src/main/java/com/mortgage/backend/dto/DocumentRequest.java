@@ -1,22 +1,23 @@
 package com.mortgage.backend.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApplicationRequest {
+public class DocumentRequest {
     @NotNull
-    private Long nationalId;
+    private String fileName;
+
     @NotNull
-    private String purpose;
+    private String type;
+
     @NotNull
-    private Double amount;
-    private List<@Valid DocumentRequest> documents;
+    private Long size;
+
+    @NotNull
+    private String presignedUrl;
 }

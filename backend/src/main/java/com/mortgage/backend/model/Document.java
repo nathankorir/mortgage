@@ -21,7 +21,7 @@ public class Document {
     @JoinColumn(name = "application_id", nullable = false)
     private Application application;
 
-    private String name;
+    private String fileName;
     private String type;
     private Long size;
 
