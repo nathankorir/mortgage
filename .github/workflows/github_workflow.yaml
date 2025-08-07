@@ -25,6 +25,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Start Docker Compose
+        working-directory: infra
         run: docker compose up -d
 
       - name: Wait for Postgres to be ready
@@ -35,4 +36,5 @@ jobs:
           done
 
       - name: Run Maven tests
+        working-directory: backend
         run: ./mvnw test
