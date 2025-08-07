@@ -4,11 +4,13 @@ import io.github.bucket4j.Bucket;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
 @Component
+@Profile("!test")
 public class RateLimitingFilter implements Filter {
     private final Bucket bucket;
 
