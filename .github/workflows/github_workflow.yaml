@@ -24,6 +24,16 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Build Docker image
+        working-directory: backend
+        run: docker build -t mortgage-service:latest .
+
+      - name: Install Trivy
+        uses: aquasecurity/trivy-action@master
+
+      - name: Scan Docker image with Trivy
+        run: trivy image --exit-code 1 --severity CRITICAL,HIGH mortgage-service:latest || true
+
       - name: Start Docker Compose
         working-directory: infra
         run: docker compose up -d
@@ -38,9 +48,3 @@ jobs:
       - name: Run Maven tests
         working-directory: backend
         run: ./mvnw test
-
-      - name: Install Trivy
-        uses: aquasecurity/trivy-action@master
-
-      - name: Scan Docker image with Trivy
-        run: trivy image --exit-code 1 --severity CRITICAL,HIGH mortgage-service:latest || true
