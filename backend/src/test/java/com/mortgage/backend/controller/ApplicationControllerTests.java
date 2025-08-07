@@ -55,6 +55,7 @@ public class ApplicationControllerTests {
 
         // Add to request
         request.setDocuments(List.of(doc1, doc2));
+        System.out.println("request: " + objectMapper.writeValueAsString(request));
 
         mockMvc.perform(post("/api/v1/applications")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -3,6 +3,7 @@ package com.mortgage.backend.service;
 import com.mortgage.backend.dto.ApplicationRequest;
 import com.mortgage.backend.dto.ApplicationResponse;
 import com.mortgage.backend.dto.DecisionRequestDto;
+import com.mortgage.backend.dto.KafkaMessageDto;
 import com.mortgage.backend.enums.Enum.ApplicationStatus;
 import com.mortgage.backend.mapper.ApplicationMapper;
 import com.mortgage.backend.model.Application;
@@ -15,15 +16,21 @@ import com.mortgage.backend.repository.UserRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ApplicationService {
@@ -32,12 +39,17 @@ public class ApplicationService {
     private final UserRepository userRepository;
     private final ApplicationMapper applicationMapper;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationService.class);
+    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public ApplicationService(ApplicationRepository applicationRepository, UserRepository userRepository, DecisionRepository decisionRepository, ApplicationMapper applicationMapper) {
+    @Value(value = "${spring.kafka.topic}")
+    private String topic;
+
+    public ApplicationService(ApplicationRepository applicationRepository, UserRepository userRepository, DecisionRepository decisionRepository, ApplicationMapper applicationMapper, KafkaTemplate kafkaTemplate) {
         this.applicationRepository = applicationRepository;
         this.userRepository = userRepository;
         this.decisionRepository = decisionRepository;
         this.applicationMapper = applicationMapper;
+        this.kafkaTemplate = kafkaTemplate;
     }
 
     public ApplicationResponse create(ApplicationRequest dto) {
@@ -46,7 +58,9 @@ public class ApplicationService {
         logger.info("Creating application got user");
         Application application = applicationMapper.toEntity(dto);
         application.setApplicant(user);
-        return applicationMapper.toDto(applicationRepository.save(application));
+        Application created = applicationRepository.save(application);
+        produceKafkaMessage(KafkaMessageDto.builder().application(created).build());
+        return applicationMapper.toDto(created);
     }
 
     public Optional<ApplicationResponse> get(UUID id) {
@@ -81,7 +95,8 @@ public class ApplicationService {
         application.setStatus(dto.getStatus());
 
         decisionRepository.save(decision); // save decision first (if cascade is not used)
-        applicationRepository.save(application);
+        Application updated = applicationRepository.save(application);
+        produceKafkaMessage(KafkaMessageDto.builder().application(updated).build());
 
         return applicationMapper.toDto(application);
     }
@@ -117,5 +132,18 @@ public class ApplicationService {
         }
 
         return predicate;
+    }
+
+    private void produceKafkaMessage(KafkaMessageDto kafkaMessageDto) {
+        Map<String, String> messageMap = new HashMap<>();
+        messageMap.put(String.valueOf(kafkaMessageDto.getApplication().getId()), kafkaMessageDto.toString());
+        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, messageMap.toString());
+        future.whenComplete((result, ex) -> {
+            if (ex == null) {
+                logger.info("Sent message to kafka");
+            } else {
+                logger.error("Failed to send message " + ex.getMessage());
+            }
+        });
     }
 }
