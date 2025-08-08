@@ -82,17 +82,11 @@ public class ApplicationControllerTests {
         request.setPurpose("Investment property");
         request.setAmount(100000.0);
 
-        String response = mockMvc.perform(post("/api/v1/applications")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+        ApplicationResponse response = applicationService.create(request);
 
-        ApplicationResponse created = objectMapper.readValue(response, ApplicationResponse.class);
-
-        mockMvc.perform(get("/api/v1/applications/" + created.getId()))
+        mockMvc.perform(get("/api/v1/applications/" + response.getId()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(created.getId().toString()))
+                .andExpect(jsonPath("$.id").value(response.getId().toString()))
                 .andExpect(jsonPath("$.purpose").value("Investment property"));
     }
 
