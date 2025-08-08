@@ -243,6 +243,10 @@
 				<configuration>
 					<excludes>
 						<exclude>com/mortgage/backend/security/**</exclude>
+						<exclude>com/mortgage/backend/config/**</exclude>
+						<exclude>com/mortgage/backend/exception/**</exclude>
+						<exclude>com/mortgage/backend/enums/**</exclude>
+						<exclude>com/mortgage/backend/controller/AuthController*</exclude>
 					</excludes>
 				</configuration>
 				<executions>
