@@ -102,7 +102,7 @@ https://codecov.io/gh/nathankorir/mortgage/branch/main/graph/badge.svg
 "SPRING_DATASOURCE_URL": "jdbc:postgresql://mortgage-postgres:5432/mortgage",
 "SPRING_DATASOURCE_USERNAME": "postgres",
 "SPRING_DATASOURCE_PASSWORD": "postgres",
-"KAFKA_BOOTSTRAP_SERVERS": "kafka:9094",
+"KAFKA_BOOTSTRAP_SERVERS": "kafka:9092",
 "KAFKA_TOPIC": "loan.applications"
 }
 
