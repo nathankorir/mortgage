@@ -62,7 +62,7 @@ public class ApplicationController {
     @GetMapping("applicant")
     @PreAuthorize("hasRole('APPLICANT')")
     public Page<ApplicationResponse> getApplicationsByNationalId(
-            @RequestParam(required = false) Long nationalId,
+            @RequestParam(required = true) Long nationalId,
             @RequestParam(required = false) Enum.ApplicationStatus status,
             @RequestParam(required = false) String purpose,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdFrom,

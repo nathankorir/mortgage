@@ -1,14 +1,13 @@
 package com.mortgage.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mortgage.backend.config.StreamProducer;
 import com.mortgage.backend.dto.ApplicationRequest;
 import com.mortgage.backend.dto.ApplicationResponse;
 import com.mortgage.backend.dto.DecisionRequestDto;
-import com.mortgage.backend.dto.DocumentRequest;
 import com.mortgage.backend.enums.Enum.ApplicationStatus;
 import com.mortgage.backend.enums.Enum.DecisionType;
 import com.mortgage.backend.service.ApplicationService;
-import com.mortgage.backend.service.KafkaUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -40,7 +38,7 @@ public class ApplicationControllerTests {
     private ApplicationService  applicationService;
 
     @MockitoBean
-    private KafkaUtils kafkaUtils;
+    private StreamProducer streamProducer;
 
 //    @Test
 //    @WithMockUser(username = "testuser", roles = {"APPLICANT"})
@@ -83,8 +81,7 @@ public class ApplicationControllerTests {
     @Test
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenGetApplicationByIdThenReturnApplication() throws Exception {
-        Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(streamProducer).produce(Mockito.any(), Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -102,8 +99,7 @@ public class ApplicationControllerTests {
     @Test
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenSearchApplicationsThenReturnResults() throws Exception {
-        Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(streamProducer).produce(Mockito.any(), Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -123,8 +119,7 @@ public class ApplicationControllerTests {
     @Test
     @WithMockUser(username = "testuser", roles = {"APPLICANT"})
     void whenSearchApplicationsByNationalIdThenReturnResults() throws Exception {
-        Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(streamProducer).produce(Mockito.any(), Mockito.any(),  Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -145,8 +140,7 @@ public class ApplicationControllerTests {
     @Test
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenDecideOnApplicationThenSuccess() throws Exception {
-        Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any(), Mockito.any());
+        Mockito.doNothing().when(streamProducer).produce(Mockito.any(), Mockito.any(),  Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);

@@ -1,5 +1,6 @@
 package com.mortgage.backend.service;
 
+import com.mortgage.backend.config.StreamProducer;
 import com.mortgage.backend.dto.ApplicationRequest;
 import com.mortgage.backend.dto.ApplicationResponse;
 import com.mortgage.backend.dto.DecisionRequestDto;
@@ -16,6 +17,7 @@ import com.mortgage.backend.repository.UserRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,15 +34,18 @@ public class ApplicationService {
     private final DecisionRepository decisionRepository;
     private final UserRepository userRepository;
     private final ApplicationMapper applicationMapper;
-    private KafkaUtils kafkaUtils;
+    private final StreamProducer stream;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationService.class);
 
-    public ApplicationService(ApplicationRepository applicationRepository, UserRepository userRepository, DecisionRepository decisionRepository, ApplicationMapper applicationMapper,  KafkaUtils kafkaUtils) {
+    @Value(value = "${spring.kafka.topic}")
+    private String topic;
+
+    public ApplicationService(ApplicationRepository applicationRepository, UserRepository userRepository, DecisionRepository decisionRepository, ApplicationMapper applicationMapper,  StreamProducer stream) {
         this.applicationRepository = applicationRepository;
         this.userRepository = userRepository;
         this.decisionRepository = decisionRepository;
         this.applicationMapper = applicationMapper;
-        this.kafkaUtils = kafkaUtils;
+        this.stream = stream;
     }
 
     public ApplicationResponse create(ApplicationRequest dto) {
@@ -49,7 +54,7 @@ public class ApplicationService {
         Application application = applicationMapper.toEntity(dto);
         application.setApplicant(user);
         Application created = applicationRepository.save(application);
-        kafkaUtils.produceKafkaMessage(created.getId().toString(), KafkaMessageDto.builder().application(created).build().toString());
+        stream.produce(topic, created.getId().toString(), KafkaMessageDto.builder().application(created).build().toString());
         return applicationMapper.toDto(created);
     }
 
@@ -84,9 +89,9 @@ public class ApplicationService {
 
         application.setStatus(dto.getStatus());
 
-        decisionRepository.save(decision); // save decision first (if cascade is not used)
+        decisionRepository.save(decision);
         Application updated = applicationRepository.save(application);
-        kafkaUtils.produceKafkaMessage(updated.getId().toString(), KafkaMessageDto.builder().application(updated).build().toString());
+        stream.produce(topic, updated.getId().toString(), KafkaMessageDto.builder().application(updated).build().toString());
         return applicationMapper.toDto(application);
     }
 

@@ -91,3 +91,17 @@ Password: admin
 
 ### Architecture diagram
 https://drive.google.com/file/d/1OA9In7zbA5pJh7adfL5zOqNM5pslNOl-/view?usp=drive_link
+
+### CI Badge
+https://codecov.io/gh/nathankorir/mortgage/branch/main/graph/badge.svg
+
+### Environment json
+{
+"JAVA_OPTS": "-Xmx512m",
+"SPRING_ACTIVE_PROFILE": "dev",
+"SPRING_DATASOURCE_URL": "jdbc:postgresql://mortgage-postgres:5432/mortgage",
+"SPRING_DATASOURCE_USERNAME": "postgres",
+"SPRING_DATASOURCE_PASSWORD": "postgres",
+"KAFKA_BOOTSTRAP_SERVERS": "kafka:9094",
+"KAFKA_TOPIC": "loan.applications"
+}

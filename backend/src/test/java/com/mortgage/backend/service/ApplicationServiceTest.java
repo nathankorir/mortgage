@@ -1,5 +1,6 @@
 package com.mortgage.backend.service;
 
+import com.mortgage.backend.config.StreamProducer;
 import com.mortgage.backend.dto.ApplicationRequest;
 import com.mortgage.backend.dto.ApplicationResponse;
 import com.mortgage.backend.dto.DecisionRequestDto;
@@ -42,7 +43,7 @@ public class ApplicationServiceTest {
     @Mock
     private ApplicationMapper applicationMapper;
     @Mock
-    private KafkaUtils kafkaUtils; // will not be used
+    private StreamProducer streamProducer;
 
     @InjectMocks
     private ApplicationService applicationService;
