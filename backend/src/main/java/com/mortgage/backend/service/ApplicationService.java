@@ -16,10 +16,8 @@ import com.mortgage.backend.repository.UserRepository;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -38,18 +36,15 @@ public class ApplicationService {
     private final DecisionRepository decisionRepository;
     private final UserRepository userRepository;
     private final ApplicationMapper applicationMapper;
+    private KafkaUtils kafkaUtils;
     private static final Logger logger = LoggerFactory.getLogger(ApplicationService.class);
-    private final KafkaTemplate<String, String> kafkaTemplate;
 
-    @Value(value = "${spring.kafka.topic}")
-    private String topic;
-
-    public ApplicationService(ApplicationRepository applicationRepository, UserRepository userRepository, DecisionRepository decisionRepository, ApplicationMapper applicationMapper, KafkaTemplate kafkaTemplate) {
+    public ApplicationService(ApplicationRepository applicationRepository, UserRepository userRepository, DecisionRepository decisionRepository, ApplicationMapper applicationMapper,  KafkaUtils kafkaUtils) {
         this.applicationRepository = applicationRepository;
         this.userRepository = userRepository;
         this.decisionRepository = decisionRepository;
         this.applicationMapper = applicationMapper;
-        this.kafkaTemplate = kafkaTemplate;
+        this.kafkaUtils = kafkaUtils;
     }
 
     public ApplicationResponse create(ApplicationRequest dto) {
@@ -59,7 +54,7 @@ public class ApplicationService {
         Application application = applicationMapper.toEntity(dto);
         application.setApplicant(user);
         Application created = applicationRepository.save(application);
-        produceKafkaMessage(KafkaMessageDto.builder().application(created).build());
+//        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(created).build());
         return applicationMapper.toDto(created);
     }
 
@@ -96,7 +91,7 @@ public class ApplicationService {
 
         decisionRepository.save(decision); // save decision first (if cascade is not used)
         Application updated = applicationRepository.save(application);
-        produceKafkaMessage(KafkaMessageDto.builder().application(updated).build());
+//        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(updated).build());
 
         return applicationMapper.toDto(application);
     }
@@ -132,18 +127,5 @@ public class ApplicationService {
         }
 
         return predicate;
-    }
-
-    private void produceKafkaMessage(KafkaMessageDto kafkaMessageDto) {
-        Map<String, String> messageMap = new HashMap<>();
-        messageMap.put(String.valueOf(kafkaMessageDto.getApplication().getId()), kafkaMessageDto.toString());
-        CompletableFuture<SendResult<String, String>> future = kafkaTemplate.send(topic, messageMap.toString());
-        future.whenComplete((result, ex) -> {
-            if (ex == null) {
-                logger.info("Sent message to kafka");
-            } else {
-                logger.error("Failed to send message " + ex.getMessage());
-            }
-        });
     }
 }

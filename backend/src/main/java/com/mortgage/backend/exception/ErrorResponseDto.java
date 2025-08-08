@@ -12,8 +12,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorResponseDto {
+    @Builder.Default
     private LocalDateTime timestamp = LocalDateTime.now();
     private String path;
+    @Builder.Default
     private Integer errorCode = 200;
     private String detail;
 }

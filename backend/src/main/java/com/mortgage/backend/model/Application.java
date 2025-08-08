@@ -28,6 +28,9 @@ public class Application {
     private User applicant;
 
     @Column(nullable = false)
+    private Double amount;
+
+    @Column(nullable = false)
     private String purpose;
 
     @Enumerated(EnumType.STRING)

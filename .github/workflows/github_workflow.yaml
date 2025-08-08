@@ -51,6 +51,6 @@ jobs:
             sleep 2
           done
 
-      - name: Run Maven tests
+      - name: Run Maven tests with JaCoCo
         working-directory: backend
-        run: ./mvnw test
+        run: ./mvnw clean verify

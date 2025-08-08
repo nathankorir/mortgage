@@ -28,4 +28,11 @@ public interface ApplicationMapper {
             }
         }
     }
+
+    @AfterMapping
+    default void setNationalId(@MappingTarget ApplicationResponse response, Application application) {
+        if (application.getApplicant() != null) {
+            response.setNationalId(application.getApplicant().getNationalId());
+        }
+    }
 }

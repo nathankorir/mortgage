@@ -51,6 +51,7 @@ CREATE TABLE application
 (
     id           UUID PRIMARY KEY     DEFAULT uuid_generate_v4(),
     applicant_id UUID        NOT NULL,
+    amount       NUMERIC     NOT NULL,
     purpose      VARCHAR     NOT NULL,
     status       VARCHAR(50) NOT NULL DEFAULT 'PENDING',
     created_at   TIMESTAMP   NOT NULL DEFAULT now(),

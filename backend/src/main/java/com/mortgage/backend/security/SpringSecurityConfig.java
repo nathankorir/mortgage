@@ -42,6 +42,10 @@ public class SpringSecurityConfig {
 //                    authorize.requestMatchers(HttpMethod.PATCH, "/api/**").hasAnyRole("ADMIN", "USER");
 //                    authorize.requestMatchers(HttpMethod.GET, "/api/**").permitAll();
                     authorize.requestMatchers("/api/auth/**").permitAll();
+                    authorize.requestMatchers("/swagger-ui/**").permitAll();
+                    authorize.requestMatchers("/v3/api-docs/**").permitAll();
+                    authorize.requestMatchers("/v3/api-docs.yaml/**").permitAll();
+                    authorize.requestMatchers("/actuator/**").permitAll();
                     authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     authorize.anyRequest().authenticated();
                 }).httpBasic(Customizer.withDefaults());

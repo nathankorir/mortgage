@@ -7,6 +7,7 @@ import com.mortgage.backend.dto.DecisionRequestDto;
 import com.mortgage.backend.dto.DocumentRequest;
 import com.mortgage.backend.enums.Enum.ApplicationStatus;
 import com.mortgage.backend.enums.Enum.DecisionType;
+import com.mortgage.backend.service.ApplicationService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-@WithMockUser(username = "testuser")
+//@WithMockUser(username = "testuser")
 public class ApplicationControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -33,7 +34,11 @@ public class ApplicationControllerTests {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private ApplicationService  applicationService;
+
     @Test
+    @WithMockUser(username = "testuser", roles = {"APPLICANT"})
     void whenCreateApplicationThenSuccess() throws Exception {
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -63,6 +68,7 @@ public class ApplicationControllerTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.purpose").value("Buy new home"))
+                .andExpect(jsonPath("$.nationalId").value(31328103L))
                 .andExpect(jsonPath("$.documents").isArray())
                 .andExpect(jsonPath("$.documents.length()").value(2));
     }
@@ -90,16 +96,19 @@ public class ApplicationControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenSearchApplicationsThenReturnResults() throws Exception {
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
         request.setPurpose("Build rentals");
         request.setAmount(100000.0);
 
-        mockMvc.perform(post("/api/v1/applications")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+        applicationService.create(request);
+
+//        mockMvc.perform(post("/api/v1/applications")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(request)))
+//                .andExpect(status().isOk());
 
         mockMvc.perform(get("/api/v1/applications")
                         .param("purpose", "Build rentals")
@@ -110,19 +119,40 @@ public class ApplicationControllerTests {
     }
 
     @Test
+    @WithMockUser(username = "testuser", roles = {"APPLICANT"})
+    void whenSearchApplicationsByNationalIdThenReturnResults() throws Exception {
+        ApplicationRequest request = new ApplicationRequest();
+        request.setNationalId(31328103L);
+        request.setPurpose("Build rentals");
+        request.setAmount(100000.0);
+
+        applicationService.create(request);
+
+        mockMvc.perform(get("/api/v1/applications/applicant")
+                        .param("purpose", "Build rentals")
+                        .param("nationalId", "31328103")
+                        .param("page", "0")
+                        .param("size", "20"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").isArray());
+    }
+
+    @Test
+    @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenDecideOnApplicationThenSuccess() throws Exception {
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
         request.setPurpose("Build own residence");
         request.setAmount(90000.0);
 
-        String response = mockMvc.perform(post("/api/v1/applications")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString();
+//        String response = mockMvc.perform(post("/api/v1/applications")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(request)))
+//                .andExpect(status().isOk())
+//                .andReturn().getResponse().getContentAsString();
+        ApplicationResponse applicationResponse = applicationService.create(request);
 
-        ApplicationResponse created = objectMapper.readValue(response, ApplicationResponse.class);
+//        ApplicationResponse created = objectMapper.readValue(response, ApplicationResponse.class);
 
         DecisionRequestDto decision = new DecisionRequestDto();
         decision.setApproverId(UUID.fromString("afc5d2ba-7ab7-4ad2-93b5-10ae3eda373f"));
@@ -130,7 +160,7 @@ public class ApplicationControllerTests {
         decision.setStatus(ApplicationStatus.APPROVED);
         decision.setDecisionType(DecisionType.APPROVED);
 
-        mockMvc.perform(patch("/api/v1/applications/" + created.getId() + "/decision")
+        mockMvc.perform(patch("/api/v1/applications/" + applicationResponse.getId() + "/decision")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(decision)))
                 .andExpect(status().isOk())
