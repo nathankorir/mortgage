@@ -54,3 +54,7 @@ jobs:
       - name: Run Maven tests with JaCoCo
         working-directory: backend
         run: ./mvnw clean verify
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: backend/target/site/jacoco/jacoco.xml
