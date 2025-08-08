@@ -3,6 +3,7 @@ package com.mortgage.backend.service;
 import com.mortgage.backend.dto.ApplicationRequest;
 import com.mortgage.backend.dto.ApplicationResponse;
 import com.mortgage.backend.dto.DecisionRequestDto;
+import com.mortgage.backend.dto.KafkaMessageDto;
 import com.mortgage.backend.enums.Enum.ApplicationStatus;
 import com.mortgage.backend.mapper.ApplicationMapper;
 import com.mortgage.backend.model.Application;
@@ -49,7 +50,7 @@ public class ApplicationService {
         Application application = applicationMapper.toEntity(dto);
         application.setApplicant(user);
         Application created = applicationRepository.save(application);
-//        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(created).build());
+        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(created).build());
         return applicationMapper.toDto(created);
     }
 
@@ -86,7 +87,7 @@ public class ApplicationService {
 
         decisionRepository.save(decision); // save decision first (if cascade is not used)
         Application updated = applicationRepository.save(application);
-//        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(updated).build());
+        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(updated).build());
 
         return applicationMapper.toDto(application);
     }
