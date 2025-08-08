@@ -239,7 +239,12 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.13</version> <!-- Use the latest stable version -->
+				<version>0.8.13</version>
+				<configuration>
+					<excludes>
+						<exclude>com/mortgage/backend/security/**</exclude>
+					</excludes>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>

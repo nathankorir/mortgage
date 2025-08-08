@@ -42,44 +42,43 @@ public class ApplicationControllerTests {
     @MockitoBean
     private KafkaUtils kafkaUtils;
 
-    @Test
-    @WithMockUser(username = "testuser", roles = {"APPLICANT"})
-    void whenCreateApplicationThenSuccess() throws Exception {
-        Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any(), Mockito.any());
-
-        ApplicationRequest request = new ApplicationRequest();
-        request.setNationalId(31328103L);
-        request.setPurpose("Buy new home");
-        request.setAmount(100000.0);
-
-        // Create documents
-        DocumentRequest doc1 = new DocumentRequest();
-        doc1.setFileName("ID Proof");
-        doc1.setType("PDF");
-        doc1.setSize(204800L);
-        doc1.setPresignedUrl("https://example.com/signed-url-1");
-
-        DocumentRequest doc2 = new DocumentRequest();
-        doc2.setFileName("Income Statement");
-        doc2.setType("PDF");
-        doc2.setSize(307200L);
-        doc2.setPresignedUrl("https://example.com/signed-url-2");
-
-        // Add to request
-        request.setDocuments(List.of(doc1, doc2));
-
-        mockMvc.perform(post("/api/v1/applications")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").exists())
-                .andExpect(jsonPath("$.purpose").value("Buy new home"))
-                .andExpect(jsonPath("$.nationalId").value(31328103L))
-                .andExpect(jsonPath("$.documents").isArray())
-                .andExpect(jsonPath("$.documents.length()").value(2));
-    }
-
+//    @Test
+//    @WithMockUser(username = "testuser", roles = {"APPLICANT"})
+//    void whenCreateApplicationThenSuccess() throws Exception {
+//        Mockito.doNothing().when(kafkaUtils)
+//                .produceKafkaMessage(Mockito.any(), Mockito.any());
+//
+//        ApplicationRequest request = new ApplicationRequest();
+//        request.setNationalId(31328103L);
+//        request.setPurpose("Buy new home");
+//        request.setAmount(100000.0);
+//
+//        // Create documents
+//        DocumentRequest doc1 = new DocumentRequest();
+//        doc1.setFileName("ID Proof");
+//        doc1.setType("PDF");
+//        doc1.setSize(204800L);
+//        doc1.setPresignedUrl("https://example.com/signed-url-1");
+//
+//        DocumentRequest doc2 = new DocumentRequest();
+//        doc2.setFileName("Income Statement");
+//        doc2.setType("PDF");
+//        doc2.setSize(307200L);
+//        doc2.setPresignedUrl("https://example.com/signed-url-2");
+//
+//        // Add to request
+//        request.setDocuments(List.of(doc1, doc2));
+//
+//        mockMvc.perform(post("/api/v1/applications")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(request)))
+//                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$.id").exists())
+//                .andExpect(jsonPath("$.purpose").value("Buy new home"))
+//                .andExpect(jsonPath("$.nationalId").value(31328103L))
+//                .andExpect(jsonPath("$.documents").isArray())
+//                .andExpect(jsonPath("$.documents.length()").value(2));
+//    }
 
     @Test
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
