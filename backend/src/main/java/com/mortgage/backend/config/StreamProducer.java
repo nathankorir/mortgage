@@ -14,6 +14,7 @@ public class StreamProducer {
 
     public void produce(String topic, String key, String message) {
         try {
+            logger.info("Sending request to topic {} with key {}", topic, key);
             kafkaTemplate.send(topic, key, message);
         } catch (Exception e) {
             logger.error("Failed to send Kafka message to topic {}: {}", topic, e.getMessage(), e);

@@ -1,6 +1,6 @@
 package com.mortgage.backend.dto;
 
-import com.mortgage.backend.model.Application;
+import com.mortgage.backend.enums.Enum.ApplicationStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +16,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @ToString
 public class KafkaMessageDto {
-    private Application application;
+    private UUID applicationId;
+    private Double amount;
+    private String purpose;
+    private ApplicationStatus status;
     private LocalDateTime timestamp = LocalDateTime.now();
     private String traceId = UUID.randomUUID().toString();
     private String version = "1.0";

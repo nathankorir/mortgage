@@ -54,7 +54,7 @@ public class ApplicationService {
         Application application = applicationMapper.toEntity(dto);
         application.setApplicant(user);
         Application created = applicationRepository.save(application);
-        stream.produce(topic, created.getId().toString(), KafkaMessageDto.builder().application(created).build().toString());
+        stream.produce(topic, created.getId().toString(), KafkaMessageDto.builder().applicationId(created.getId()).amount(created.getAmount()).purpose(created.getPurpose()).status(created.getStatus()).build().toString());
         return applicationMapper.toDto(created);
     }
 
@@ -91,7 +91,7 @@ public class ApplicationService {
 
         decisionRepository.save(decision);
         Application updated = applicationRepository.save(application);
-        stream.produce(topic, updated.getId().toString(), KafkaMessageDto.builder().application(updated).build().toString());
+        stream.produce(topic, updated.getId().toString(), KafkaMessageDto.builder().applicationId(updated.getId()).amount(updated.getAmount()).purpose(updated.getPurpose()).status(updated.getStatus()).build().toString());
         return applicationMapper.toDto(application);
     }
 

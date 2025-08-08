@@ -105,3 +105,14 @@ https://codecov.io/gh/nathankorir/mortgage/branch/main/graph/badge.svg
 "KAFKA_BOOTSTRAP_SERVERS": "kafka:9094",
 "KAFKA_TOPIC": "loan.applications"
 }
+
+### Kafka topic schema
+{
+"applicationId": "550e8400-e29b-41d4-a716-446655440000",
+"amount": 250000.00,
+"purpose": "Home renovation",
+"status": "PENDING",
+"timestamp": "2025-08-08T14:32:45",
+"traceId": "123e4567-e89b-12d3-a456-426614174000",
+"version": "1.0"
+}

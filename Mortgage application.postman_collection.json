@@ -47,7 +47,7 @@
 			"response": []
 		},
 		{
-			"name": "Get auth token",
+			"name": "Get auth token officer",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -87,7 +87,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYXRoYW5fYXBwbGljYW50IiwiaWF0IjoxNzU0NjUzMzA5LCJleHAiOjE3NTQ2NTM2Njl9.0y0gwqd8GTzAfiYqUmXaPin2b0YTscqQK1lOJsCYea8pWvVqvFjXd6sYY01Un1_l",
+							"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYXRoYW5fb2ZmaWNlciIsImlhdCI6MTc1NDY1Nzk3NSwiZXhwIjoxNzU0NjU4MzM1fQ.RMKEYwPN3hRmfiySEJIUlLtfst82ZDrJcXOJQhtD-Rl2uG0t87gGkRCwoCHvC9Cq",
 							"type": "string"
 						}
 					]
@@ -104,7 +104,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/v1/applications/{id}/decision",
+					"raw": "http://localhost:8080/api/v1/applications/2e43c2a1-13c3-4b3d-a90d-3a0ecdeb925e/decision",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -114,7 +114,7 @@
 						"api",
 						"v1",
 						"applications",
-						"{id}",
+						"2e43c2a1-13c3-4b3d-a90d-3a0ecdeb925e",
 						"decision"
 					]
 				}
@@ -129,7 +129,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYXRoYW5fYXBwbGljYW50IiwiaWF0IjoxNzU0NjU2MTA1LCJleHAiOjE3NTQ2NTY0NjV9.cN8bAZAY9g2rFfCZ8jSmGkOcISk4sYgVn2e9O8OLhRGrAt3L-1fq9sOxKwd8x7Fp",
+							"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYXRoYW5fb2ZmaWNlciIsImlhdCI6MTc1NDY1Nzk3NSwiZXhwIjoxNzU0NjU4MzM1fQ.RMKEYwPN3hRmfiySEJIUlLtfst82ZDrJcXOJQhtD-Rl2uG0t87gGkRCwoCHvC9Cq",
 							"type": "string"
 						}
 					]
@@ -137,7 +137,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/v1/applications/{id}",
+					"raw": "http://localhost:8080/api/v1/applications/2e43c2a1-13c3-4b3d-a90d-3a0ecdeb925e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -147,7 +147,7 @@
 						"api",
 						"v1",
 						"applications",
-						"{id}"
+						"2e43c2a1-13c3-4b3d-a90d-3a0ecdeb925e"
 					]
 				}
 			},
@@ -161,7 +161,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYXRoYW5fYXBwbGljYW50IiwiaWF0IjoxNzU0NjU2MTA1LCJleHAiOjE3NTQ2NTY0NjV9.cN8bAZAY9g2rFfCZ8jSmGkOcISk4sYgVn2e9O8OLhRGrAt3L-1fq9sOxKwd8x7Fp",
+							"value": "eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiJuYXRoYW5fb2ZmaWNlciIsImlhdCI6MTc1NDY1Nzk3NSwiZXhwIjoxNzU0NjU4MzM1fQ.RMKEYwPN3hRmfiySEJIUlLtfst82ZDrJcXOJQhtD-Rl2uG0t87gGkRCwoCHvC9Cq",
 							"type": "string"
 						}
 					]
@@ -196,6 +196,39 @@
 							"value": "2025-07-18T08:12:56.181965",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get auth token applicant",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"usernameOrEmail\":\"nathan_applicant\",\n    \"password\":\"password\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/auth/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"auth",
+						"login"
 					]
 				}
 			},
