@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DocumentResponse {
-    private String name;
+    private String fileName;
     private String type;
     private Long size;
     private String presignedUrl;
