@@ -46,7 +46,7 @@ public class ApplicationControllerTests {
     @WithMockUser(username = "testuser", roles = {"APPLICANT"})
     void whenCreateApplicationThenSuccess() throws Exception {
         Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any());
+                .produceKafkaMessage(Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -85,7 +85,7 @@ public class ApplicationControllerTests {
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenGetApplicationByIdThenReturnApplication() throws Exception {
         Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any());
+                .produceKafkaMessage(Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -104,7 +104,7 @@ public class ApplicationControllerTests {
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenSearchApplicationsThenReturnResults() throws Exception {
         Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any());
+                .produceKafkaMessage(Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -125,7 +125,7 @@ public class ApplicationControllerTests {
     @WithMockUser(username = "testuser", roles = {"APPLICANT"})
     void whenSearchApplicationsByNationalIdThenReturnResults() throws Exception {
         Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any());
+                .produceKafkaMessage(Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);
@@ -147,7 +147,7 @@ public class ApplicationControllerTests {
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
     void whenDecideOnApplicationThenSuccess() throws Exception {
         Mockito.doNothing().when(kafkaUtils)
-                .produceKafkaMessage(Mockito.any());
+                .produceKafkaMessage(Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
         request.setNationalId(31328103L);

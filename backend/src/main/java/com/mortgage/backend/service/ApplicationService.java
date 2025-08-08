@@ -44,13 +44,12 @@ public class ApplicationService {
     }
 
     public ApplicationResponse create(ApplicationRequest dto) {
-        logger.info("Creating application service");
+        logger.info("Creating application");
         User user = userRepository.findByNationalId(dto.getNationalId()).orElseThrow(() -> new NoSuchElementException("User not found"));
-        logger.info("Creating application got user");
         Application application = applicationMapper.toEntity(dto);
         application.setApplicant(user);
         Application created = applicationRepository.save(application);
-        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(created).build());
+        kafkaUtils.produceKafkaMessage(created.getId().toString(), KafkaMessageDto.builder().application(created).build().toString());
         return applicationMapper.toDto(created);
     }
 
@@ -87,8 +86,7 @@ public class ApplicationService {
 
         decisionRepository.save(decision); // save decision first (if cascade is not used)
         Application updated = applicationRepository.save(application);
-        kafkaUtils.produceKafkaMessage(KafkaMessageDto.builder().application(updated).build());
-
+        kafkaUtils.produceKafkaMessage(updated.getId().toString(), KafkaMessageDto.builder().application(updated).build().toString());
         return applicationMapper.toDto(application);
     }
 
