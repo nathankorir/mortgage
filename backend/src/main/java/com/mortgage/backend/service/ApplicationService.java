@@ -3,7 +3,6 @@ package com.mortgage.backend.service;
 import com.mortgage.backend.dto.ApplicationRequest;
 import com.mortgage.backend.dto.ApplicationResponse;
 import com.mortgage.backend.dto.DecisionRequestDto;
-import com.mortgage.backend.dto.KafkaMessageDto;
 import com.mortgage.backend.enums.Enum.ApplicationStatus;
 import com.mortgage.backend.mapper.ApplicationMapper;
 import com.mortgage.backend.model.Application;
@@ -18,17 +17,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 @Service
 public class ApplicationService {

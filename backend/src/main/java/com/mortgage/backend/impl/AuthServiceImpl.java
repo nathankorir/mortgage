@@ -4,15 +4,11 @@ import com.mortgage.backend.dto.LoginDto;
 import com.mortgage.backend.security.JwtTokenProvider;
 import com.mortgage.backend.service.AuthService;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -28,7 +24,6 @@ public class AuthServiceImpl implements AuthService {
                 loginDto.getUsernameOrEmail(),
                 loginDto.getPassword()
         ));
-        System.out.println(authentication.getPrincipal().toString());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = jwtTokenProvider.generateToken(authentication);

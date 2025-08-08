@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-//@WithMockUser(username = "testuser")
 public class ApplicationControllerTests {
     @Autowired
     private MockMvc mockMvc;
@@ -100,11 +99,6 @@ public class ApplicationControllerTests {
 
         applicationService.create(request);
 
-//        mockMvc.perform(post("/api/v1/applications")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(status().isOk());
-
         mockMvc.perform(get("/api/v1/applications")
                         .param("purpose", "Build rentals")
                         .param("page", "0")
@@ -140,14 +134,7 @@ public class ApplicationControllerTests {
         request.setPurpose("Build own residence");
         request.setAmount(90000.0);
 
-//        String response = mockMvc.perform(post("/api/v1/applications")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(request)))
-//                .andExpect(status().isOk())
-//                .andReturn().getResponse().getContentAsString();
         ApplicationResponse applicationResponse = applicationService.create(request);
-
-//        ApplicationResponse created = objectMapper.readValue(response, ApplicationResponse.class);
 
         DecisionRequestDto decision = new DecisionRequestDto();
         decision.setApproverId(UUID.fromString("afc5d2ba-7ab7-4ad2-93b5-10ae3eda373f"));
