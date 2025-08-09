@@ -136,57 +136,6 @@ paths:
             '*/*':
               schema:
                 $ref: "#/components/schemas/ApplicationResponse"
-  /api/v1/applications/applicant:
-    get:
-      tags:
-      - application-controller
-      operationId: getApplicationsByNationalId
-      parameters:
-      - name: nationalId
-        in: query
-        required: false
-        schema:
-          type: integer
-          format: int64
-      - name: status
-        in: query
-        required: false
-        schema:
-          type: string
-          enum:
-          - PENDING
-          - APPROVED
-          - REJECTED
-          - CANCELLED
-      - name: purpose
-        in: query
-        required: false
-        schema:
-          type: string
-      - name: createdFrom
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date-time
-      - name: createdTo
-        in: query
-        required: false
-        schema:
-          type: string
-          format: date-time
-      - name: pageable
-        in: query
-        required: true
-        schema:
-          $ref: "#/components/schemas/Pageable"
-      responses:
-        "200":
-          description: OK
-          content:
-            '*/*':
-              schema:
-                $ref: "#/components/schemas/PageApplicationResponse"
 components:
   schemas:
     ApplicationRequest:
@@ -342,13 +291,13 @@ components:
           $ref: "#/components/schemas/SortObject"
         pageable:
           $ref: "#/components/schemas/PageableObject"
+        numberOfElements:
+          type: integer
+          format: int32
         first:
           type: boolean
         last:
           type: boolean
-        numberOfElements:
-          type: integer
-          format: int32
         empty:
           type: boolean
     PageableObject:
