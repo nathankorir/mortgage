@@ -127,4 +127,9 @@ public class ApplicationService {
 
         return predicate;
     }
+
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsernameOrEmail(username, username)
+                .orElseThrow(() -> new NoSuchElementException("User not found with username: " + username));
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -46,32 +47,29 @@ public class ApplicationController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('OFFICER')")
+    @PreAuthorize("hasAnyRole('OFFICER', 'APPLICANT')")
     public Page<ApplicationResponse> getApplications(
             @RequestParam(required = false) Long nationalId,
             @RequestParam(required = false) Enum.ApplicationStatus status,
             @RequestParam(required = false) String purpose,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdFrom,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdTo,
-            @PageableDefault(size = 20) Pageable pageable
+            @PageableDefault(size = 20) Pageable pageable,
+            Authentication authentication
     ) {
         logger.info("Getting Applications");
+
+        if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_APPLICANT"))) {
+            String username = authentication.getName();
+            Long applicantNationalId = applicationService.getUserByUsername(username).getNationalId();
+            logger.info("Applicant role detected. Using nationalId={}", applicantNationalId);
+            return applicationService.search(applicantNationalId, status, purpose, createdFrom, createdTo, pageable);
+        }
+
+        // Officer role - nationalId filter is optional
         return applicationService.search(nationalId, status, purpose, createdFrom, createdTo, pageable);
     }
 
-    @GetMapping("applicant")
-    @PreAuthorize("hasRole('APPLICANT')")
-    public Page<ApplicationResponse> getApplicationsByNationalId(
-            @RequestParam(required = true) Long nationalId,
-            @RequestParam(required = false) Enum.ApplicationStatus status,
-            @RequestParam(required = false) String purpose,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdFrom,
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime createdTo,
-            @PageableDefault(size = 20) Pageable pageable
-    ) {
-        logger.info("Getting Applications by National Id");
-        return applicationService.search(nationalId, status, purpose, createdFrom, createdTo, pageable);
-    }
 
     @PatchMapping("/{id}/decision")
     @PreAuthorize("hasRole('OFFICER')")

@@ -99,7 +99,7 @@ public class ApplicationControllerTests {
 
     @Test
     @WithMockUser(username = "testofficer", roles = {"OFFICER"})
-    void whenSearchApplicationsThenReturnResults() throws Exception {
+    void whenSearchApplicationsAsOfficerThenReturnResults() throws Exception {
         Mockito.doNothing().when(streamProducer).produce(Mockito.any(), Mockito.any(), Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
@@ -118,8 +118,8 @@ public class ApplicationControllerTests {
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = {"APPLICANT"})
-    void whenSearchApplicationsByNationalIdThenReturnResults() throws Exception {
+    @WithMockUser(username = "nathan_applicant", roles = {"APPLICANT"})
+    void whenSearchApplicationsAsApplicantThenReturnResults() throws Exception {
         Mockito.doNothing().when(streamProducer).produce(Mockito.any(), Mockito.any(),  Mockito.any());
 
         ApplicationRequest request = new ApplicationRequest();
@@ -129,9 +129,9 @@ public class ApplicationControllerTests {
 
         applicationService.create(request);
 
-        mockMvc.perform(get("/api/v1/applications/applicant")
+        // No need to pass nationalId — it will be resolved from the username in token
+        mockMvc.perform(get("/api/v1/applications")
                         .param("purpose", "Build rentals")
-                        .param("nationalId", "31328103")
                         .param("page", "0")
                         .param("size", "20"))
                 .andExpect(status().isOk())
